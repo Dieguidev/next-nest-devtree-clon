@@ -5,6 +5,5 @@ export const GetHeaders = createParamDecorator(
     const req = ctx.switchToHttp().getRequest();
     const headers = req.headers;
     return !data ? headers : headers[data];
-
-  }
-)
+  },
+);
