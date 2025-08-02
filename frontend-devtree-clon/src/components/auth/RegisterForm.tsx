@@ -24,11 +24,13 @@ export const RegisterForm = () => {
   const {
     register,
     handleSubmit,
-    // watch,
+    watch,
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: initialValues
   })
+
+  const password = watch("password");
 
   const onSubmit = (data: FormInputs) => {
     console.log(data);
@@ -58,7 +60,13 @@ export const RegisterForm = () => {
           type="email"
           placeholder="Email de Registro"
           className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
-          {...register("email", { required: "El email es obligatorio" })}
+          {...register("email", {
+            required: "El email es obligatorio",
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: "E-mail no válido",
+            },
+          })}
         />
         {errors.email && <ErrorMessage message={errors.email.message} />}
       </div>
@@ -80,7 +88,13 @@ export const RegisterForm = () => {
           type="password"
           placeholder="Password de Registro"
           className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
-          {...register("password", { required: "La contraseña es obligatoria" })}
+          {...register("password", {
+            required: "La contraseña es obligatoria",
+            minLength: {
+              value: 6,
+              message: "La contraseña debe tener al menos 6 caracteres",
+            },
+          })}
         />
         {errors.password && <ErrorMessage message={errors.password.message} />}
       </div>
@@ -92,7 +106,11 @@ export const RegisterForm = () => {
           type="password"
           placeholder="Repetir Password"
           className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
-          {...register("password_confirmation", { required: "La confirmación de la contraseña es obligatoria" })}
+          {...register("password_confirmation", {
+            required: "La confirmación de la contraseña es obligatoria",
+            validate: value =>
+              value === password || "Las contraseñas no coinciden",
+          })}
         />
         {errors.password_confirmation && <ErrorMessage message={errors.password_confirmation.message} />}
       </div>
