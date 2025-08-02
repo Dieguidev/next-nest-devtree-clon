@@ -9,6 +9,7 @@ import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { generateSlug } from 'src/utils/generateSlug';
 
 @Injectable()
 export class CreateUserUseCase {
@@ -21,12 +22,13 @@ export class CreateUserUseCase {
 
   async execute(createUserDto: CreateUserDto) {
     try {
-      const { password, ...userData } = createUserDto;
+      const { password, slug, ...userData } = createUserDto;
 
       const user = await this.prismaService.user.create({
         data: {
           ...userData,
           password: bcrypt.hashSync(password, 10),
+          slug: generateSlug(slug),
         },
       });
 
@@ -51,10 +53,20 @@ export class CreateUserUseCase {
   private handlerDBExceptions(error: any): never {
     if (error.code === 'P2002') {
       // Prisma unique constraint error
-      throw new BadRequestException('Email already exists');
-    }
-    this.logger.error(error);
+      const target = error.meta?.target;
 
+      if (target?.includes('email')) {
+        throw new BadRequestException('Email already exists');
+      }
+
+      if (target?.includes('slug')) {
+        throw new BadRequestException('Slug already exists');
+      }
+
+      throw new BadRequestException('Unique constraint violation');
+    }
+
+    this.logger.error(error);
     throw new InternalServerErrorException('Something went wrong');
   }
 }

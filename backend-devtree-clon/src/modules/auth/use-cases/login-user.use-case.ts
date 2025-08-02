@@ -19,11 +19,10 @@ export class LoginUserUseCase {
       where: { email },
     });
 
-    if (!user)
-      throw new UnauthorizedException('Credentials are not valid (email)');
+    if (!user) throw new UnauthorizedException('Credentials are not valid');
 
     if (!bcrypt.compareSync(password, user.password))
-      throw new UnauthorizedException('Credentials are not valid (password)');
+      throw new UnauthorizedException('Credentials are not valid');
 
     // Remover password antes de retornar
     const { password: _, ...userWithoutPassword } = user;
