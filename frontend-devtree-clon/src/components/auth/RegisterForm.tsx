@@ -13,12 +13,22 @@ type FormInputs = {
 
 export const RegisterForm = () => {
 
+  const initialValues: FormInputs = {
+    name: "",
+    email: "",
+    handle: "",
+    password: "",
+    password_confirmation: ""
+  }
+
   const {
     register,
     handleSubmit,
     // watch,
     formState: { errors },
-  } = useForm<FormInputs>()
+  } = useForm<FormInputs>({
+    defaultValues: initialValues
+  })
 
   const onSubmit = (data: FormInputs) => {
     console.log(data);
@@ -50,6 +60,7 @@ export const RegisterForm = () => {
           className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
           {...register("email", { required: "El email es obligatorio" })}
         />
+        {errors.email && <ErrorMessage message={errors.email.message} />}
       </div>
       <div className="grid grid-cols-1 space-y-3">
         <label htmlFor="handle" className="text-2xl text-slate-500">Handle</label>
@@ -60,6 +71,7 @@ export const RegisterForm = () => {
           className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
           {...register("handle", { required: "El handle es obligatorio" })}
         />
+        {errors.handle && <ErrorMessage message={errors.handle.message} />}
       </div>
       <div className="grid grid-cols-1 space-y-3">
         <label htmlFor="password" className="text-2xl text-slate-500">Password</label>
@@ -70,6 +82,7 @@ export const RegisterForm = () => {
           className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
           {...register("password", { required: "La contraseña es obligatoria" })}
         />
+        {errors.password && <ErrorMessage message={errors.password.message} />}
       </div>
 
       <div className="grid grid-cols-1 space-y-3">
@@ -81,6 +94,7 @@ export const RegisterForm = () => {
           className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
           {...register("password_confirmation", { required: "La confirmación de la contraseña es obligatoria" })}
         />
+        {errors.password_confirmation && <ErrorMessage message={errors.password_confirmation.message} />}
       </div>
 
       <input
