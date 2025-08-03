@@ -9,31 +9,54 @@ interface RegisterActionProps {
 
 export const registerAction = async (formData: RegisterActionProps) => {
   try {
-    const response = await fetch("http://localhost:3000/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        slug: formData.handle,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    console.log(response);
-
-    if (!response.ok) {
-      throw new Error("Registration failed");
-    }
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/api/auth/register`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          slug: formData.handle,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const data = await response.json();
-    console.log({ data });
 
-    return data;
+    if (!response.ok) {
+      const errorMessages: Record<string, string> = {
+        "Email already exists": "El correo electrónico ya está registrado.",
+        "Slug already exists": "El handle de usuario ya está en uso.",
+      };
+
+      const errorMessage = Object.keys(errorMessages).find((key) =>
+        data.message.includes(key)
+      );
+
+      return {
+        success: false,
+        message: errorMessage
+          ? errorMessages[errorMessage]
+          : "Error en los datos proporcionados. Por favor, verifica e intenta nuevamente.",
+        user: {},
+      };
+    }
+
+    return {
+      success: true,
+      message: "Registro exitoso.",
+      user: data.user,
+    };
   } catch (error) {
     console.error("Registration failed:", error);
-    throw new Error("Registration failed. Please try again later.");
+    return {
+      success: false,
+      message: "Error inesperado. Por favor, intenta más tarde.",
+      user: {},
+    };
   }
 };

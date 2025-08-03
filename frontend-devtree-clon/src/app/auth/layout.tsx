@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Toaster } from "sonner";
 
 export default function AuthLayout({
   children
@@ -21,6 +22,7 @@ export default function AuthLayout({
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }

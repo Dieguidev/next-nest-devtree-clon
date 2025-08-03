@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { registerAction } from "@/action";
+import { toast } from "sonner";
+import { useState } from "react";
 
 type FormInputs = {
   name: string;
@@ -14,6 +16,8 @@ type FormInputs = {
 
 export const RegisterForm = () => {
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const initialValues: FormInputs = {
     name: "",
     email: "",
@@ -23,6 +27,7 @@ export const RegisterForm = () => {
   }
 
   const {
+    reset,
     register,
     handleSubmit,
     watch,
@@ -34,7 +39,16 @@ export const RegisterForm = () => {
   const password = watch("password");
 
   const onSubmit = async (data: FormInputs) => {
+    setIsLoading(true);
     const res = await registerAction(data);
+    if (!res.success) {
+      toast.error(res.message);
+      setIsLoading(false);
+      return
+    }
+    toast.success("Cuenta creada correctamente");
+    reset();
+    setIsLoading(false);
   };
 
   return (
@@ -117,8 +131,10 @@ export const RegisterForm = () => {
 
       <input
         type="submit"
-        className="bg-cyan-400 p-3 text-lg w-full uppercase text-slate-600 rounded-lg font-bold cursor-pointer"
-        value='Crear Cuenta'
+        className={`bg-cyan-400 p-3 text-lg w-full uppercase text-slate-600 rounded-lg font-bold cursor-pointer ${isLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        value={isLoading ? "Cargando..." : "Crear Cuenta"}
+        disabled={isLoading}
       />
     </form>
   )
