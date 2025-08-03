@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import * as morgan from 'morgan';
 import { envs } from './config/envs';
 
 async function bootstrap() {
@@ -17,6 +18,12 @@ async function bootstrap() {
       // forbidNonWhitelisted: true,
     }),
   );
+
+  app.enableCors({
+    origin: '*',
+  });
+
+  app.use(morgan('dev'));
 
   await app.listen(envs.port ?? 3000);
 

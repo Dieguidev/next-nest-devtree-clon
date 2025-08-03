@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../ui/ErrorMessage";
+import { registerAction } from "@/action";
 
 type FormInputs = {
   name: string;
@@ -32,9 +33,8 @@ export const RegisterForm = () => {
 
   const password = watch("password");
 
-  const onSubmit = (data: FormInputs) => {
-    console.log(data);
-    // Aquí puedes manejar el envío del formulario, por ejemplo, enviarlo a una API
+  const onSubmit = async (data: FormInputs) => {
+    const res = await registerAction(data);
   };
 
   return (
