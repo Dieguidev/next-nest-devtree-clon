@@ -32,7 +32,6 @@ export const LoginForm = () => {
   const onSubmit = async (data: FormInputs) => {
     setIsLoading(true);
     const res = await loginAction(data);
-    // console.log(res);
 
     if (!res.success) {
       toast.error(res.message);
@@ -40,15 +39,16 @@ export const LoginForm = () => {
       return
     }
     toast.success(res.message);
+
     localStorage.setItem("authToken", res.user.token);
     reset();
     setIsLoading(false);
   };
 
+
   const handleGoogleAuth = async () => {
     setIsLoading(true);
     const res = await googleAuthAction();
-    // console.log(res);
 
     if (res.success && res.redirectUrl) {
       window.location.href = res.redirectUrl;

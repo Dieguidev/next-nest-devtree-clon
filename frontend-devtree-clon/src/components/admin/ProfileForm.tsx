@@ -1,6 +1,14 @@
 'use client'
 
+import { useAuthStore } from '@/store/auth.store'
+
 export const ProfileForm = () => {
+  const { user } = useAuthStore()
+
+  if (!user) {
+    return <div>Cargando datos del usuario...</div>
+  }
+
   return (
     <form
       className="bg-white p-10 rounded-lg space-y-5"
@@ -15,8 +23,34 @@ export const ProfileForm = () => {
           type="text"
           className="border-none bg-slate-100 rounded-lg p-2"
           placeholder="handle o Nombre de Usuario"
+          defaultValue={user.slug}
         />
       </div>
+
+      {/* <div className="grid grid-cols-1 gap-2">
+        <label
+          htmlFor="email"
+        >Email:</label>
+        <input
+          type="email"
+          className="border-none bg-slate-100 rounded-lg p-2"
+          placeholder="Tu Email"
+          defaultValue={user.email}
+          disabled
+        />
+      </div> */}
+
+      {/* <div className="grid grid-cols-1 gap-2">
+        <label
+          htmlFor="name"
+        >Nombre:</label>
+        <input
+          type="text"
+          className="border-none bg-slate-100 rounded-lg p-2"
+          placeholder="Tu Nombre"
+          defaultValue={user.name}
+        />
+      </div> */}
 
       <div className="grid grid-cols-1 gap-2">
         <label
@@ -30,12 +64,12 @@ export const ProfileForm = () => {
 
       <div className="grid grid-cols-1 gap-2">
         <label
-          htmlFor="handle"
+          htmlFor="image"
         >Imagen:</label>
         <input
           id="image"
           type="file"
-          name="handle"
+          name="image"
           className="border-none bg-slate-100 rounded-lg p-2"
           accept="image/*"
           onChange={() => { }}
