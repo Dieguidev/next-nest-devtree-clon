@@ -19,7 +19,7 @@ model User {
   slug      String   @unique
   name      String
   email     String   @unique
-  password  String
+  password  String? // Hacer el password opcional para usuarios de Google
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

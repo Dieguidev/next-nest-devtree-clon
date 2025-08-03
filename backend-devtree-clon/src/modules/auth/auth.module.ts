@@ -5,14 +5,26 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { GoogleStrategy } from './strategies/google.strategy';
 import { envs } from 'src/config/envs';
-import { CreateUserUseCase, LoginUserUseCase } from './use-cases';
+import {
+  CreateUserUseCase,
+  LoginUserUseCase,
+  GoogleAuthUseCase,
+} from './use-cases';
 
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, CreateUserUseCase, LoginUserUseCase],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GoogleStrategy,
+    CreateUserUseCase,
+    LoginUserUseCase,
+    GoogleAuthUseCase,
+  ],
   imports: [
     ConfigModule,
     PrismaModule,

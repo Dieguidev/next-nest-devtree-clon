@@ -1,11 +1,10 @@
+import { LoginForm } from "@/components";
 import Link from "next/link";
 
 export default function LoginPage() {
   return (
     <>
-      <h1 className='text-4xl text-white font-bold'>
-        Iniciar Sesión
-      </h1>
+      <LoginForm />
 
       <div className="mt-10">
         <Link
