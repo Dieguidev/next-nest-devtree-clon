@@ -2,7 +2,7 @@ import {
   BadRequestException,
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
+  // ForbiddenException,
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -36,8 +36,11 @@ export class UserRoleGuard implements CanActivate {
     //   }
     // }
 
-    throw new ForbiddenException(
-      `User ${user.name} need a valid role: [${validRoles.join(', ')}]`,
-    );
+    // throw new ForbiddenException(
+    //   `User ${user.name} need a valid role: [${validRoles.join(', ')}]`,
+    // );
+
+    //* no usa roles
+    return true;
   }
 }

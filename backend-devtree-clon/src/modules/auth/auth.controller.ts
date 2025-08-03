@@ -11,8 +11,9 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { Auth } from './decorators/auth.decorator';
-import { ValidRoles } from './interfaces/valid-roles';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from './entities/user.entity';
+import { GetUser } from './decorators/get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -28,8 +29,14 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
+  @Get('profile')
+  @Auth()
+  getUser(@GetUser() user: User) {
+    return user;
+  }
+
   @Get('private')
-  @Auth(ValidRoles.admin)
+  @Auth()
   testingPrivateRoute() {
     return { message: 'Testing private route' };
   }
