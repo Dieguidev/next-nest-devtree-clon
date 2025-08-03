@@ -19,9 +19,6 @@ export const loginAction = async (formData: LoginActionProps) => {
     );
 
     const data = await response.json();
-    console.log(response);
-
-    console.log(data);
 
     if (!response.ok) {
       if (response.status === 500) {
@@ -45,7 +42,7 @@ export const loginAction = async (formData: LoginActionProps) => {
     return {
       success: true,
       message: "Inicio de sesión exitoso.",
-      user: data.user,
+      user: data,
     };
   } catch (error) {
     console.error("Login failed:", error);
