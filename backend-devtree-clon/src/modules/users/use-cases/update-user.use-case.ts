@@ -48,6 +48,9 @@ export class UpdateUserUseCase {
         ...userWithoutPassword,
       };
     } catch (error) {
+      // if (error instanceof BadRequestException) {
+      //   throw error; // Propagar BadRequestException directamente
+      // }
       this.handlerDBExceptions(error);
     }
   }
@@ -65,6 +68,11 @@ export class UpdateUserUseCase {
     }
 
     this.logger.error(error);
+
+    if (error instanceof BadRequestException) {
+      throw error; // Asegurarse de que BadRequestException se propague correctamente
+    }
+
     throw new InternalServerErrorException('Something went wrong');
   }
 }

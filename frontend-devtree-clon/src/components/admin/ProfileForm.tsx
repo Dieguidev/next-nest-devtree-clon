@@ -3,6 +3,8 @@
 import { useAuthStore } from '@/store/auth.store'
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '../ui/ErrorMessage';
+import { updateUserAction } from '@/action/users/update-user';
+import { toast } from 'sonner';
 
 type FormInputs = {
   handle: string;
@@ -10,7 +12,7 @@ type FormInputs = {
 }
 
 export const ProfileForm = () => {
-  const { user } = useAuthStore()
+  const { user, setUser } = useAuthStore()
   const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>({
     defaultValues: {
       handle: user?.slug || '',
@@ -24,8 +26,23 @@ export const ProfileForm = () => {
     return <div>Cargando datos del usuario...</div>
   }
 
-  const handleUserProfileForm = (data: FormInputs) => {
-    console.log(data);
+  const handleUserProfileForm = async (data: FormInputs) => {
+    const token = localStorage.getItem('authToken')
+    if (data.description === user.description && data.handle === user.slug) {
+      toast.error('No hay cambios para guardar');
+      return
+    }
+    const res = await updateUserAction({ token: token!, ...data });
+
+
+
+    if (!res.success) {
+      toast.error(res.message || 'Error al actualizar el perfil');
+      return
+    }
+    setUser(res.user)
+    toast.success(res.message)
+
   }
 
   return (
