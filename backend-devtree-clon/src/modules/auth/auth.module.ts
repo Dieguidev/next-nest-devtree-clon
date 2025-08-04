@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule } from '@nestjs/config';
+// import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { envs } from 'src/config/envs';
@@ -26,11 +26,11 @@ import { PrismaModule } from 'src/prisma/prisma.module';
     GoogleAuthUseCase,
   ],
   imports: [
-    ConfigModule,
+    // ConfigModule,
     PrismaModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      imports: [ConfigModule],
+      // imports: [ConfigModule],
       useFactory: () => {
         return {
           secret: envs.jwtSecret,

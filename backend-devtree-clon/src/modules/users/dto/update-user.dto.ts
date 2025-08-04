@@ -1,0 +1,13 @@
+import { IsString, MaxLength, MinLength } from 'class-validator';
+
+export class UpdateUserDto {
+  @IsString()
+  @MinLength(1)
+  @MaxLength(255)
+  description: string;
+
+  @IsString()
+  @MinLength(1)
+  @MaxLength(50)
+  slug: string;
+}
