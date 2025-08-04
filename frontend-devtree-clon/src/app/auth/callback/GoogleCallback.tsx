@@ -30,9 +30,8 @@ export default function GoogleCallback() {
           const user = JSON.parse(decodeURIComponent(userParam));
 
           toast.success(`¡Bienvenido, ${user.name}!`);
-          //* TODO: configurar la ruta de redireccion 
           // Redirigir al dashboard o página principal
-          // router.push('/dashboard'); // Cambiar por la ruta que corresponda
+          router.push('/admin'); // Cambiar por la ruta que corresponda
         } else {
           toast.error('No se recibió información de autenticación');
           router.push('/auth/login');

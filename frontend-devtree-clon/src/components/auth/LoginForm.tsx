@@ -5,6 +5,7 @@ import { ErrorMessage } from "../ui/ErrorMessage";
 import { GoogleButton } from "../ui/GoogleButton";
 import { loginAction, googleAuthAction } from "@/action";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type FormInputs = {
   email: string;
@@ -14,6 +15,7 @@ type FormInputs = {
 export const LoginForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const initialValues: FormInputs = {
     email: "",
@@ -43,6 +45,8 @@ export const LoginForm = () => {
     localStorage.setItem("authToken", res.user.token);
     reset();
     setIsLoading(false);
+
+    router.push("/admin");
   };
 
 

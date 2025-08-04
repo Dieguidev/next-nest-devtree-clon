@@ -1,18 +1,32 @@
 'use client'
 
 import { useAuthStore } from '@/store/auth.store'
+import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '../ui/ErrorMessage';
 
 export const ProfileForm = () => {
   const { user } = useAuthStore()
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      handle: user?.slug || '',
+      email: user?.email || '',
+      name: user?.name || '',
+      description: '',
+    }
+  });
 
   if (!user) {
     return <div>Cargando datos del usuario...</div>
   }
 
+  const handleUserProfileForm = () => {
+
+  }
+
   return (
     <form
       className="bg-white p-10 rounded-lg space-y-5"
-      onSubmit={() => { }}
+      onSubmit={handleSubmit(handleUserProfileForm)}
     >
       <legend className="text-2xl text-slate-800 text-center">Editar Información</legend>
       <div className="grid grid-cols-1 gap-2">
@@ -24,7 +38,9 @@ export const ProfileForm = () => {
           className="border-none bg-slate-100 rounded-lg p-2"
           placeholder="handle o Nombre de Usuario"
           defaultValue={user.slug}
+          {...register("handle", { required: "El Nombre de usuario es obligatorio" })}
         />
+        {errors.handle && <ErrorMessage message={errors.handle.message} />}
       </div>
 
       {/* <div className="grid grid-cols-1 gap-2">
