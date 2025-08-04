@@ -4,14 +4,19 @@ import { useAuthStore } from '@/store/auth.store'
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '../ui/ErrorMessage';
 
+type FormInputs = {
+  handle: string;
+  description: string;
+}
+
 export const ProfileForm = () => {
   const { user } = useAuthStore()
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>({
     defaultValues: {
       handle: user?.slug || '',
-      email: user?.email || '',
-      name: user?.name || '',
-      description: '',
+      // email: user?.email || '',
+      // name: user?.name || '',
+      description: user?.description || '',
     }
   });
 
@@ -19,8 +24,8 @@ export const ProfileForm = () => {
     return <div>Cargando datos del usuario...</div>
   }
 
-  const handleUserProfileForm = () => {
-
+  const handleUserProfileForm = (data: FormInputs) => {
+    console.log(data);
   }
 
   return (
@@ -37,7 +42,7 @@ export const ProfileForm = () => {
           type="text"
           className="border-none bg-slate-100 rounded-lg p-2"
           placeholder="handle o Nombre de Usuario"
-          defaultValue={user.slug}
+          // defaultValue={user.slug}
           {...register("handle", { required: "El Nombre de usuario es obligatorio" })}
         />
         {errors.handle && <ErrorMessage message={errors.handle.message} />}
@@ -75,7 +80,9 @@ export const ProfileForm = () => {
         <textarea
           className="border-none bg-slate-100 rounded-lg p-2"
           placeholder="Tu Descripción"
+          {...register('description', { required: "La descripción es obligatoria" })}
         />
+        {errors.description && <ErrorMessage message={errors.description.message} />}
       </div>
 
       <div className="grid grid-cols-1 gap-2">
