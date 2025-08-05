@@ -5,3 +5,5 @@ export * from "./ui/GoogleButton";
 export * from "./admin/NavigationTabs";
 export * from "./admin/ProfileForm";
 export * from "./auth/AuthProvider";
+export * from "./admin/ButtonVisitPerfil";
+export * from "./admin/PreviousViewProfile";

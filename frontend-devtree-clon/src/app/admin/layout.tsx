@@ -1,8 +1,8 @@
 // import NavigationTabs from "@/components";
 import NavigationTabs from "@/components/admin/NavigationTabs";
-import { AuthProvider } from "@/components";
+import { AuthProvider, ButtonVisitPerfil, PreviousViewProfile } from "@/components";
 import Image from "next/image";
-import Link from "next/link";
+
 import { Toaster } from "sonner";
 
 export default function AppLayout({
@@ -38,12 +38,7 @@ export default function AppLayout({
           <NavigationTabs />
 
           <div className="flex justify-end">
-            <Link
-              className="font-bold text-right text-slate-800 text-2xl"
-              href={''}
-              target="_blank"
-              rel="noreferrer noopener"
-            >Visitar Mi Perfil</Link>
+            <ButtonVisitPerfil />
           </div>
 
           <div className="flex flex-col md:flex-row gap-10 mt-10">
@@ -51,7 +46,7 @@ export default function AppLayout({
               {children}
             </div>
             <div className="w-full md:w-96 bg-slate-800 px-5 py-10 space-y-6">
-
+              <PreviousViewProfile />
             </div>
           </div>
         </main>

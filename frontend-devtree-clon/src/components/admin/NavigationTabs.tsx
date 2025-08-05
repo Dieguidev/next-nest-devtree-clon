@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 
 const tabs = [
-  { name: 'Links', href: '/admin', icon: BookmarkSquareIcon },
+  { name: 'Links', href: '/admin/links', icon: BookmarkSquareIcon },
   { name: 'Mi Perfil', href: '/admin/profile', icon: UserIcon },
 ]
 

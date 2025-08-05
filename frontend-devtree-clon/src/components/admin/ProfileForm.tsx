@@ -4,7 +4,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '../ui/ErrorMessage';
 import { updateUserAction } from '@/action/users/update-user';
-import { uploadImageAction } from '@/actions/users/upload-image';
+import { uploadImageAction } from '@/action/users/upload-image';
 import { toast } from 'sonner';
 import { useState, useRef } from 'react';
 import Image from 'next/image';
@@ -32,6 +32,8 @@ export const ProfileForm = () => {
 
   const handleUserProfileForm = async (data: FormInputs) => {
     const token = localStorage.getItem('authToken')
+    console.log(data.description === user.description && data.handle === user.slug);
+
     if (data.description === user.description && data.handle === user.slug) {
       toast.error('No hay cambios para guardar');
       return
@@ -124,31 +126,6 @@ export const ProfileForm = () => {
         />
         {errors.handle && <ErrorMessage message={errors.handle.message} />}
       </div>
-
-      {/* <div className="grid grid-cols-1 gap-2">
-        <label
-          htmlFor="email"
-        >Email:</label>
-        <input
-          type="email"
-          className="border-none bg-slate-100 rounded-lg p-2"
-          placeholder="Tu Email"
-          defaultValue={user.email}
-          disabled
-        />
-      </div> */}
-
-      {/* <div className="grid grid-cols-1 gap-2">
-        <label
-          htmlFor="name"
-        >Nombre:</label>
-        <input
-          type="text"
-          className="border-none bg-slate-100 rounded-lg p-2"
-          placeholder="Tu Nombre"
-          defaultValue={user.name}
-        />
-      </div> */}
 
       <div className="grid grid-cols-1 gap-2">
         <label
