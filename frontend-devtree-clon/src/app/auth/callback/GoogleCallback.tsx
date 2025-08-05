@@ -31,7 +31,7 @@ export default function GoogleCallback() {
 
           toast.success(`¡Bienvenido, ${user.name}!`);
           // Redirigir al dashboard o página principal
-          router.push('/admin'); // Cambiar por la ruta que corresponda
+          router.push('/admin/links'); // Cambiar por la ruta que corresponda
         } else {
           toast.error('No se recibió información de autenticación');
           router.push('/auth/login');
