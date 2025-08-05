@@ -34,10 +34,11 @@ model User {
 }
 
 model SocialLink {
-  id      String  @id @default(uuid())
-  name    String // facebook, github, instagram, etc.
-  url     String
-  enabled Boolean @default(true)
+  id       String  @id @default(uuid())
+  name     String // facebook, github, instagram, etc.
+  url      String
+  position Int     @default(0) // Posición del enlace en la lista
+  enabled  Boolean @default(true)
 
   // Relación con usuario
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

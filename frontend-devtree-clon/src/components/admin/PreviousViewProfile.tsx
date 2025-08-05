@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/store/auth.store"
 import Image from 'next/image'
-import { ActiveSocialLinks } from '../links/ActiveSocialLinks'
+// import { ActiveSocialLinks } from '../links/ActiveSocialLinks'
 
 export const PreviousViewProfile = () => {
   const { user } = useAuthStore()
