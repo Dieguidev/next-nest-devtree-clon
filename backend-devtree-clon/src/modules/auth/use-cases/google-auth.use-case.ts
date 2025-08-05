@@ -19,7 +19,7 @@ export class GoogleAuthUseCase {
   ) {}
 
   async execute(googleUser: GoogleUser) {
-    const { email, firstName, lastName } = googleUser;
+    const { email, firstName, lastName, picture } = googleUser;
 
     try {
       // Verificar si el usuario ya existe
@@ -39,8 +39,27 @@ export class GoogleAuthUseCase {
             slug,
             password: '', // Para usuarios de Google, no necesitamos password
             isActive: true,
+            image: picture, // Guardar la imagen de Google
           },
         });
+
+        this.logger.log(
+          `New Google user created: ${email} with image: ${picture}`,
+        );
+      } else {
+        // Si el usuario ya existe pero no tiene imagen, actualizar con la de Google
+        if (!user.image && picture) {
+          user = await this.prismaService.user.update({
+            where: { id: user.id },
+            data: {
+              image: picture,
+            },
+          });
+
+          this.logger.log(
+            `Updated existing user ${email} with Google image: ${picture}`,
+          );
+        }
       }
 
       // Remover password antes de retornar
