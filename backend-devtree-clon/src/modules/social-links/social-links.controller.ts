@@ -20,8 +20,9 @@ export class SocialLinksController {
   }
 
   @Get()
-  findAll() {
-    return this.socialLinksService.findAll();
+  @Auth()
+  getByUser(@GetUser() user: User) {
+    return this.socialLinksService.getByUser(user.id);
   }
 
   @Get(':id')
