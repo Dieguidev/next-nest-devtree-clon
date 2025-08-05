@@ -32,7 +32,7 @@ export class CreateOrUpdateSocialLinksUseCase {
         create: {
           userId,
           name: link.name,
-          url: link.url,
+          url: '',
           position: link.position,
           enabled: link.enabled,
         },

@@ -1,51 +1,88 @@
 'use client'
 
-import { useState } from "react"
-
-import { social } from "@/data/social"
-import { isValidUrl } from "@/utils"
-import { toast } from "sonner"
+import { useEffect } from "react"
 import { DevTreeInput } from "./DevTreeInput"
+import { useSocialLinksStore } from "@/store/social-link.store"
+
 
 export const LinkTreeView = () => {
-  const [devTreeLinks, setDevTreeLinks] = useState(social)
+  const {
+    socialLinks,
+    isLoading,
+    isSaving,
+    updateLink,
+    toggleLink,
+    loadSocialLinks,
+    saveSocialLinks
+  } = useSocialLinksStore()
+
+  // Solo cargar UNA VEZ si no hay datos
+  useEffect(() => {
+    if (socialLinks.length === 0) {
+      const token = localStorage.getItem("authToken")
+      if (token) {
+        loadSocialLinks(token)
+      }
+    }
+  }, [socialLinks.length, loadSocialLinks])
 
   const handleUrlchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedLinks = devTreeLinks.map(link => link.name === e.target.name ? { ...link, url: e.target.value } : link);
-
-    setDevTreeLinks(updatedLinks);
+    updateLink(e.target.name, { url: e.target.value })
   }
 
-  const handleEnableLink = (socialNetworName: string) => {
-    const updatedLinks = devTreeLinks.map(link => {
-      if (link.name === socialNetworName) {
-        if (isValidUrl(link.url)) {
-          return { ...link, enabled: !link.enabled }
-        } else {
-          toast.error(`La URL de ${link.name} no es válida`)
-        }
-      }
-      return link
-    })
+  const handleEnableLink = (socialNetworkName: string) => {
+    toggleLink(socialNetworkName)
+  }
 
-    setDevTreeLinks(updatedLinks);
+  const handleSaveChanges = async () => {
+    const token = localStorage.getItem("authToken")
+    if (token) {
+      await saveSocialLinks(token)
+    }
   }
 
   return (
     <>
-      <div className="space-y-5">
-        {devTreeLinks.map((link) => (
-          <DevTreeInput
-            key={link.name}
-            link={link}
-            handleUrlchange={handleUrlchange}
-            handleEnableLink={handleEnableLink}
-          />
-        ))}
-        <button
-          className="bg-cyan-400 p-2 text-lg w-full uppercase text-slate-600 rounded font-bold"
-        >Guardar Cambios</button>
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center p-10">
+          <div className="flex flex-col items-center space-y-3">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400"></div>
+            <div className="text-lg text-gray-600">Cargando enlaces sociales...</div>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-5">
+          {socialLinks.map((link) => (
+            <DevTreeInput
+              key={link.name}
+              link={link}
+              handleUrlchange={handleUrlchange}
+              handleEnableLink={handleEnableLink}
+            />
+          ))}
+
+          <button
+            onClick={handleSaveChanges}
+            disabled={isSaving}
+            className={`
+              p-3 text-lg w-full uppercase rounded-lg font-bold transition-all duration-200
+              ${isSaving
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-cyan-400 text-slate-600 hover:bg-cyan-500 cursor-pointer'
+              }
+            `}
+          >
+            {isSaving ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-600"></div>
+                <span>Guardando...</span>
+              </div>
+            ) : (
+              'Guardar Cambios'
+            )}
+          </button>
+        </div>
+      )}
     </>
   )
 }

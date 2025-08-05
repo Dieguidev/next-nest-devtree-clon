@@ -5,7 +5,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUrl,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -22,9 +21,8 @@ class SocialLink {
   @IsNotEmpty()
   name: string;
 
-  @IsUrl()
-  @IsNotEmpty()
-  url: string;
+  @IsOptional()
+  url?: string;
 
   @IsInt()
   @IsOptional()
