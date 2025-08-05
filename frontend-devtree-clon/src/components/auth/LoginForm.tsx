@@ -46,7 +46,7 @@ export const LoginForm = () => {
     reset();
     setIsLoading(false);
 
-    router.push("/admin");
+    router.push("/admin/links");
   };
 
 
