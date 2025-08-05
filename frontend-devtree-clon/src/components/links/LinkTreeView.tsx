@@ -1,12 +1,11 @@
 'use client'
 
 import { useState } from "react"
-import { DevTreeInput } from "./DevTreeInput"
+
 import { social } from "@/data/social"
 import { isValidUrl } from "@/utils"
 import { toast } from "sonner"
-
-
+import { DevTreeInput } from "./DevTreeInput"
 
 export const LinkTreeView = () => {
   const [devTreeLinks, setDevTreeLinks] = useState(social)
@@ -43,6 +42,9 @@ export const LinkTreeView = () => {
             handleEnableLink={handleEnableLink}
           />
         ))}
+        <button
+          className="bg-cyan-400 p-2 text-lg w-full uppercase text-slate-600 rounded font-bold"
+        >Guardar Cambios</button>
       </div>
     </>
   )

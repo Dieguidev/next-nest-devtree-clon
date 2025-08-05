@@ -10,9 +10,6 @@ interface DevTreeInputProps {
   handleEnableLink: (name: string) => void
 }
 
-
-
-
 export const DevTreeInput = ({ link, handleUrlchange, handleEnableLink }: DevTreeInputProps) => {
   return (
     <div className="bg-white shadow-sm p-5 flex items-center gap-3">

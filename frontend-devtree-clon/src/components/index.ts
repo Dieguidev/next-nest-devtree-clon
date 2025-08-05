@@ -8,4 +8,4 @@ export * from "./auth/AuthProvider";
 export * from "./admin/ButtonVisitPerfil";
 export * from "./admin/PreviousViewProfile";
 export * from "./links/LinkTreeView";
-export * from "./links/DevTreeInput";
+export * from "./links/ActiveSocialLinks";

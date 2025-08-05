@@ -2,8 +2,7 @@
 
 import { useAuthStore } from "@/store/auth.store"
 import Image from 'next/image'
-
-
+import { ActiveSocialLinks } from '../links/ActiveSocialLinks'
 
 export const PreviousViewProfile = () => {
   const { user } = useAuthStore()
@@ -42,6 +41,8 @@ export const PreviousViewProfile = () => {
         {user?.description || 'No tienes descripción'}
       </p>
 
+      {/* Mostrar enlaces sociales activos */}
+      {/* <ActiveSocialLinks /> */}
     </>
   )
 }

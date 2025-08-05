@@ -24,8 +24,28 @@ model User {
   description String? @default("")
   image       String?
 
+  // Relación con enlaces sociales
+  socialLinks SocialLink[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model SocialLink {
+  id      String  @id @default(uuid())
+  name    String // facebook, github, instagram, etc.
+  url     String
+  enabled Boolean @default(true)
+
+  // Relación con usuario
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, name]) // Un usuario no puede tener enlaces duplicados del mismo tipo
+  @@map("social_links")
 }
