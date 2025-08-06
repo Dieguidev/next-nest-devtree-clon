@@ -2,10 +2,17 @@
 
 import { useAuthStore } from "@/store/auth.store"
 import Image from 'next/image'
-// import { ActiveSocialLinks } from '../links/ActiveSocialLinks'
+import { ActiveSocialLinks } from '../links/ActiveSocialLinks'
+import { useSocialLinksStore } from "@/store/social-link.store"
+import { isValidUrl } from "@/utils"
 
 export const PreviousViewProfile = () => {
   const { user } = useAuthStore()
+  const { socialLinks } = useSocialLinksStore()
+
+  const enableLinks = socialLinks.filter((link) =>
+    link.enabled && link.url && isValidUrl(link.url)
+  )
   return (
     <>
       <p className="text-4xl text-center text-white">
@@ -41,8 +48,14 @@ export const PreviousViewProfile = () => {
         {user?.description || 'No tienes descripción'}
       </p>
 
-      {/* Mostrar enlaces sociales activos */}
-      {/* <ActiveSocialLinks /> */}
+      <div className="mt-20 flex flex-col gap-5">
+        {
+          enableLinks.map(link => (
+            <ActiveSocialLinks key={link.name} link={link} />
+          ))
+        }
+
+      </div>
     </>
   )
 }

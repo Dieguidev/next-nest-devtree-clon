@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { SocialLink } from "@/interfaces/social.interface";
 
 interface UpdateSocialLinksProps {
@@ -89,6 +90,10 @@ export async function updateSocialLinks(
     }
 
     const data = await response.json();
+
+    // Revalidar la caché después de una actualización exitosa
+    revalidatePath("/admin");
+    revalidatePath("/admin/links");
 
     return {
       success: true,

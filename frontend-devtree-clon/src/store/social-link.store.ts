@@ -138,23 +138,53 @@ export const useSocialLinksStore = create<SocialLinksState>((set, get) => ({
         socialLinks: linksToSave, // Enviar TODOS, no filtrar
       });
 
+      console.log("Respuesta del backend:", result);
+
       if (result.success) {
         toast.success(result.message);
-        if (result.socialLinks) {
-          // Fusionar la respuesta con la estructura completa
+
+        // Actualizar el store con los datos devueltos por el backend
+        if (result.socialLinks && result.socialLinks.length > 0) {
+          // Importar la estructura base para conservar iconos y otras propiedades
           const { social } = await import("@/data/social");
-          const mergedLinks = social.map((localLink) => {
-            const backendLink = result.socialLinks?.find(
-              (bl) => bl.name === localLink.name
-            );
-            return backendLink ? { ...localLink, ...backendLink } : localLink;
+
+          // Crear un mapa con los datos del backend para acceso rápido
+          const backendLinksMap = new Map(
+            result.socialLinks.map((link) => [link.name, link])
+          );
+
+          // Fusionar manteniendo toda la información
+          const updatedLinks = social.map((localLink) => {
+            const backendData = backendLinksMap.get(localLink.name);
+
+            if (backendData) {
+              // Fusionar manteniendo propiedades del enlace local (como iconos)
+              return {
+                ...localLink,
+                url: backendData.url,
+                enabled: backendData.enabled,
+                position: backendData.position,
+              };
+            }
+
+            // Si no hay datos del backend, usar valores por defecto
+            return {
+              ...localLink,
+              url: "",
+              enabled: false,
+              position: localLink.position || 0,
+            };
           });
 
           set({
-            socialLinks: mergedLinks,
+            socialLinks: updatedLinks,
             lastUpdated: new Date(),
           });
+        } else {
+          // Si no hay datos en la respuesta, recargar desde el backend
+          await get().loadSocialLinks(token);
         }
+
         return true;
       } else {
         toast.error(result.message);
