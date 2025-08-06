@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUserUseCase } from './use-cases/update-user.use-case';
 import { UploadUserImageUseCase } from './use-cases/upload-user-image.use-case';
 import { GetUserBySlugUseCase } from './use-cases/get-by-slug.use-case';
+import { VerifySlugAvailableUseCase } from './use-cases/verify-slug-available.use-case';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +12,7 @@ export class UsersService {
     private readonly updateUserUseCase: UpdateUserUseCase,
     private readonly uploadUserImageUseCase: UploadUserImageUseCase,
     private readonly getUserBySlugUseCase: GetUserBySlugUseCase,
+    private readonly verifySlugAvailableUseCase: VerifySlugAvailableUseCase,
   ) {}
   findAll() {
     return `This action returns all users`;
@@ -30,6 +32,10 @@ export class UsersService {
       fileBuffer,
       fileMimeType,
     );
+  }
+
+  verifySlug(slug: string) {
+    return this.verifySlugAvailableUseCase.execute(slug);
   }
 
   remove(id: string) {

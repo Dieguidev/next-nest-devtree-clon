@@ -51,6 +51,11 @@ export class UsersController {
     return this.usersService.uploadImage(user.id, file.buffer, file.mimetype);
   }
 
+  @Post('verify-slug')
+  verifySlug(@Body('slug') slug: string) {
+    return this.usersService.verifySlug(slug);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
