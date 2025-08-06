@@ -22,6 +22,7 @@ export class GetUserBySlugUseCase {
             url: true,
             position: true,
             enabled: true,
+            name: true,
           },
         },
       },

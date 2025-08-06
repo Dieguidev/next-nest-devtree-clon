@@ -95,6 +95,8 @@ export async function updateSocialLinks(
     revalidatePath("/admin");
     revalidatePath("/admin/links");
 
+    revalidatePath(`/(publics)/[slug]`);
+
     return {
       success: true,
       message: "Enlaces sociales actualizados correctamente",
