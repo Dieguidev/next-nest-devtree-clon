@@ -95,7 +95,7 @@ export const ProfileForm = () => {
       }
 
       setUser(res.data.user)
-      toast.success(res.data.message)
+      toast.success('Imagen actualizada correctamente')
       setImagePreview(null)
       if (fileInputRef.current) {
         fileInputRef.current.value = ''

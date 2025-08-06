@@ -7,6 +7,7 @@ import { registerAction, googleAuthAction } from "@/action";
 import { toast } from "sonner";
 import { useState } from "react";
 import { handleStore } from "@/store/handle.store";
+import { useRouter } from "next/navigation";
 
 type FormInputs = {
   name: string;
@@ -17,6 +18,8 @@ type FormInputs = {
 }
 
 export const RegisterForm = () => {
+
+  const router = useRouter();
 
   const { handle, setHandle } = handleStore();
 
@@ -54,6 +57,8 @@ export const RegisterForm = () => {
     reset();
     setHandle('');
     setIsLoading(false);
+    router.push("/auth/login");
+    window.scrollTo(0, 0);
   };
 
   const handleGoogleAuth = async () => {

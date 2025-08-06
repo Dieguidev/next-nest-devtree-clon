@@ -33,7 +33,6 @@ export const loginAction = async (formData: LoginActionProps) => {
       return {
         success: false,
         message:
-          data.message ||
           "Error al iniciar sesión. Por favor, verifica tus credenciales.",
         user: null,
       };

@@ -96,6 +96,10 @@ export const LoginForm = () => {
           className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
           {...register("password", {
             required: "El Password es obligatorio",
+            minLength: {
+              value: 6,
+              message: "El Password debe tener al menos 6 caracteres",
+            },
           })}
         />
         {errors.password && (

@@ -65,10 +65,10 @@ export async function updateSocialLinks(
       }
 
       if (response.status === 400) {
-        const errorData = await response.json();
+        // const errorData = await response.json();
         return {
           success: false,
-          message: errorData.message || "Datos inválidos enviados",
+          message: "Datos inválidos enviados",
           socialLinks: null,
         };
       }
