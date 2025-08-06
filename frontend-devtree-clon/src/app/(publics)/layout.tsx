@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Toaster } from "sonner";
 
 export default function AuthLayout({
@@ -10,12 +11,14 @@ export default function AuthLayout({
     <>
       <div className='bg-slate-800 min-h-screen'>
         <div className='max-w-lg mx-auto pt-10 px-5'>
-          <Image
-            src='/Logo.svg'
-            alt='Logotipo Devtree'
-            width={500} // Ajusta el ancho según sea necesario
-            height={500} // Ajusta la altura según sea necesario
-          />
+          <Link href='/'>
+            <Image
+              src='/Logo.svg'
+              alt='Logotipo Devtree'
+              width={500} // Ajusta el ancho según sea necesario
+              height={500} // Ajusta la altura según sea necesario
+            />
+          </Link>
           <div className='py-10'>
             {children}
 

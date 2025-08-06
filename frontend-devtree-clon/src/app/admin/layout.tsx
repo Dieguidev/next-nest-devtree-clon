@@ -4,6 +4,7 @@ import { AuthProvider, ButtonVisitPerfil, PreviousViewProfile } from "@/componen
 import Image from "next/image";
 
 import { Toaster } from "sonner";
+import Link from "next/link";
 
 export default function AppLayout({
   children
@@ -15,13 +16,15 @@ export default function AppLayout({
       <header className="bg-slate-800 py-5">
         <div className="mx-auto max-w-5xl flex flex-col md:flex-row items-center md:justify-between">
           <div className="w-full p-5 lg:p-0 md:w-1/3">
-            <Image
-              src="/logo.svg"
-              alt="Logo DevTree"
-              width={150}
-              height={50}
-              className="w-full block object-contain"
-            />
+            <Link href='/admin/links'>
+              <Image
+                src="/logo.svg"
+                alt="Logo DevTree"
+                width={150}
+                height={50}
+                className="w-full block object-contain"
+              />
+            </Link>
           </div>
           <div className="md:w-1/3 md:flex md:justify-end">
             <button
