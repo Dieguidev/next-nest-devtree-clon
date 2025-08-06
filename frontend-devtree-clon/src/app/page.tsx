@@ -1,3 +1,4 @@
+import { SearchHandleForm } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -39,6 +40,8 @@ export default function HomePage() {
             <p className="text-slate-800 text-xl">
               Únete a más de 200 mil developers compartiendo sus redes sociales, comparte tu perfil de TikTok, Facebook, Instagram, YouTube, Github y más
             </p>
+
+            <SearchHandleForm />
           </div>
         </div>
       </main>

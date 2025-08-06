@@ -9,3 +9,4 @@ export * from "./admin/ButtonVisitPerfil";
 export * from "./admin/PreviousViewProfile";
 export * from "./links/LinkTreeView";
 export * from "./links/ActiveSocialLinks";
+export * from "./home/SearchHandleForm";
