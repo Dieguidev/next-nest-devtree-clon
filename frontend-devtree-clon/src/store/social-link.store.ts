@@ -19,6 +19,9 @@ interface SocialLinksState {
   toggleLink: (name: string) => void;
   loadSocialLinks: (token: string) => Promise<void>;
   saveSocialLinks: (token: string) => Promise<boolean>;
+  reorderLinks: (
+    reorderedActiveLinks: (SocialLink & { position?: number })[]
+  ) => Promise<void>;
   resetStore: () => void;
 }
 
@@ -54,11 +57,37 @@ export const useSocialLinksStore = create<SocialLinksState>((set, get) => ({
       return;
     }
 
-    set((state) => ({
-      socialLinks: state.socialLinks.map((link) =>
-        link.name === name ? { ...link, enabled: !link.enabled } : link
-      ),
-    }));
+    set((state) => {
+      // Si se está activando el enlace y no tiene position, asignar una nueva
+      if (
+        !link.enabled &&
+        (link.position === undefined || link.position >= 999)
+      ) {
+        // Encontrar la máxima position de los enlaces activos
+        const activeLinks = state.socialLinks.filter(
+          (l) => l.enabled && l.url && isValidUrl(l.url)
+        );
+        const maxPosition =
+          activeLinks.length > 0
+            ? Math.max(...activeLinks.map((l) => l.position || 0))
+            : -1;
+
+        return {
+          socialLinks: state.socialLinks.map((l) =>
+            l.name === name
+              ? { ...l, enabled: !l.enabled, position: maxPosition + 1 }
+              : l
+          ),
+        };
+      }
+
+      // Toggle normal
+      return {
+        socialLinks: state.socialLinks.map((l) =>
+          l.name === name ? { ...l, enabled: !l.enabled } : l
+        ),
+      };
+    });
   },
 
   // Cargar enlaces desde el backend
@@ -73,7 +102,7 @@ export const useSocialLinksStore = create<SocialLinksState>((set, get) => ({
 
       if (result.success) {
         // SIEMPRE fusionar con la estructura completa de enlaces
-        const mergedLinks = social.map((localLink) => {
+        const mergedLinks = social.map((localLink, index) => {
           // Buscar si existe este enlace en el backend
           const backendLink = result.socialLinks?.find(
             (bl) => bl.name === localLink.name
@@ -82,7 +111,7 @@ export const useSocialLinksStore = create<SocialLinksState>((set, get) => ({
           // Si existe en el backend, usar esos datos, sino usar los valores por defecto
           return backendLink
             ? { ...localLink, ...backendLink }
-            : { ...localLink, url: "", enabled: false }; // Valores por defecto
+            : { ...localLink, url: "", enabled: false, position: index }; // Asignar position por defecto
         });
 
         set({
@@ -92,10 +121,11 @@ export const useSocialLinksStore = create<SocialLinksState>((set, get) => ({
       } else {
         // Si hay error, al menos mostrar la estructura básica
         set({
-          socialLinks: social.map((link) => ({
+          socialLinks: social.map((link, index) => ({
             ...link,
             url: "",
             enabled: false,
+            position: index, // Asignar position por defecto
           })),
           lastUpdated: new Date(),
         });
@@ -106,10 +136,11 @@ export const useSocialLinksStore = create<SocialLinksState>((set, get) => ({
       // En caso de error, mostrar estructura básica
       const { social } = await import("@/data/social");
       set({
-        socialLinks: social.map((link) => ({
+        socialLinks: social.map((link, index) => ({
           ...link,
           url: "",
           enabled: false,
+          position: index, // Asignar position por defecto
         })),
         lastUpdated: new Date(),
       });
@@ -138,52 +169,16 @@ export const useSocialLinksStore = create<SocialLinksState>((set, get) => ({
         socialLinks: linksToSave, // Enviar TODOS, no filtrar
       });
 
-      console.log("Respuesta del backend:", result);
-
       if (result.success) {
         toast.success(result.message);
 
-        // Actualizar el store con los datos devueltos por el backend
-        if (result.socialLinks && result.socialLinks.length > 0) {
-          // Importar la estructura base para conservar iconos y otras propiedades
-          const { social } = await import("@/data/social");
-
-          // Crear un mapa con los datos del backend para acceso rápido
-          const backendLinksMap = new Map(
-            result.socialLinks.map((link) => [link.name, link])
-          );
-
-          // Fusionar manteniendo toda la información
-          const updatedLinks = social.map((localLink) => {
-            const backendData = backendLinksMap.get(localLink.name);
-
-            if (backendData) {
-              // Fusionar manteniendo propiedades del enlace local (como iconos)
-              return {
-                ...localLink,
-                url: backendData.url,
-                enabled: backendData.enabled,
-                position: backendData.position,
-              };
-            }
-
-            // Si no hay datos del backend, usar valores por defecto
-            return {
-              ...localLink,
-              url: "",
-              enabled: false,
-              position: localLink.position || 0,
-            };
-          });
-
-          set({
-            socialLinks: updatedLinks,
-            lastUpdated: new Date(),
-          });
-        } else {
-          // Si no hay datos en la respuesta, recargar desde el backend
+        // NO fusionar, mantener exactamente lo que acabamos de enviar
+        // Solo actualizar si es necesario hacer una recarga completa
+        if (!result.socialLinks || result.socialLinks.length === 0) {
+          // Solo recargar si no hay datos en la respuesta
           await get().loadSocialLinks(token);
         }
+        // Si hay datos, mantener el estado actual que ya es correcto
 
         return true;
       } else {
@@ -207,4 +202,54 @@ export const useSocialLinksStore = create<SocialLinksState>((set, get) => ({
       isSaving: false,
       lastUpdated: null,
     }),
+
+  // Reordenar enlaces y guardar automáticamente
+  reorderLinks: async (reorderedActiveLinks) => {
+    const { socialLinks } = get();
+    const token = localStorage.getItem("authToken");
+
+    if (!token) return;
+
+    // Crear una copia del array completo
+    const updatedLinks = [...socialLinks];
+
+    // Paso 1: Asignar nuevas posiciones SOLO a los enlaces activos reordenados
+    reorderedActiveLinks.forEach((reorderedLink, index) => {
+      const linkIndex = updatedLinks.findIndex(
+        (link) => link.name === reorderedLink.name
+      );
+      if (linkIndex !== -1) {
+        updatedLinks[linkIndex] = {
+          ...updatedLinks[linkIndex],
+          position: index, // Posiciones 0, 1, 2, 3...
+        };
+      }
+    });
+
+    // Paso 2: Reasignar posiciones a TODOS los enlaces inactivos (después de los activos)
+    const inactiveLinks = updatedLinks.filter(
+      (link) =>
+        !reorderedActiveLinks.some(
+          (activeLink) => activeLink.name === link.name
+        )
+    );
+
+    inactiveLinks.forEach((inactiveLink, index) => {
+      const linkIndex = updatedLinks.findIndex(
+        (link) => link.name === inactiveLink.name
+      );
+      if (linkIndex !== -1) {
+        updatedLinks[linkIndex] = {
+          ...updatedLinks[linkIndex],
+          position: reorderedActiveLinks.length + index, // Después de los activos
+        };
+      }
+    });
+
+    // Actualizar el store inmediatamente para feedback visual
+    set({ socialLinks: updatedLinks });
+
+    // Guardar automáticamente en el backend
+    await get().saveSocialLinks(token);
+  },
 }));
