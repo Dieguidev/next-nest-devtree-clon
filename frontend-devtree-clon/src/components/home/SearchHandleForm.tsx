@@ -5,6 +5,8 @@ import { ErrorMessage } from "../ui/ErrorMessage";
 import { slugify } from "@/utils/slugify";
 import { verifySlugAction } from "@/action";
 import { toast } from "sonner";
+import { handleStore } from "@/store/handle.store";
+import { useRouter } from "next/navigation";
 
 
 type FormInputs = {
@@ -13,6 +15,9 @@ type FormInputs = {
 
 export const SearchHandleForm = () => {
 
+  const router = useRouter();
+
+  const { setHandle } = handleStore()
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormInputs>({
     defaultValues: {
@@ -31,6 +36,9 @@ export const SearchHandleForm = () => {
       toast.error("El nombre de usuario ya está en uso");
       return;
     }
+    setHandle(slug);
+    router.push(`/auth/register`);
+
   };
 
   return (

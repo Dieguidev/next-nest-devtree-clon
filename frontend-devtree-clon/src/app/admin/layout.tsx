@@ -1,6 +1,6 @@
 // import NavigationTabs from "@/components";
 import NavigationTabs from "@/components/admin/NavigationTabs";
-import { AuthProvider, ButtonVisitPerfil, PreviousViewProfile } from "@/components";
+import { AuthProvider, ButtonCloseSession, ButtonVisitPerfil, PreviousViewProfile } from "@/components";
 import Image from "next/image";
 
 import { Toaster } from "sonner";
@@ -27,12 +27,7 @@ export default function AppLayout({
             </Link>
           </div>
           <div className="md:w-1/3 md:flex md:justify-end">
-            <button
-              className=" bg-lime-500 p-2 text-slate-800 uppercase font-black text-xs rounded-lg cursor-pointer"
-            // onClick={() => { }}
-            >
-              Cerrar Sesión
-            </button>
+            <ButtonCloseSession />
           </div>
         </div>
       </header>

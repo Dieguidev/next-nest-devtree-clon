@@ -6,6 +6,7 @@ import { GoogleButton } from "../ui/GoogleButton";
 import { registerAction, googleAuthAction } from "@/action";
 import { toast } from "sonner";
 import { useState } from "react";
+import { handleStore } from "@/store/handle.store";
 
 type FormInputs = {
   name: string;
@@ -17,12 +18,14 @@ type FormInputs = {
 
 export const RegisterForm = () => {
 
+  const { handle, setHandle } = handleStore();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const initialValues: FormInputs = {
     name: "",
     email: "",
-    handle: "",
+    handle: handle,
     password: "",
     password_confirmation: ""
   }
@@ -49,6 +52,7 @@ export const RegisterForm = () => {
     }
     toast.success(res.message);
     reset();
+    setHandle('');
     setIsLoading(false);
   };
 
