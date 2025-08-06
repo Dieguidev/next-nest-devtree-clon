@@ -5,10 +5,14 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
 import { CreateSocialLinkDto } from './dto/create-social-link.dto';
 import { Auth } from '../auth/decorators/auth.decorator';
 import type { User } from '../auth/entities/user.entity';
+import { GetUserBySlugUseCase } from '../users/use-cases/get-by-slug.use-case';
 
 @Controller('social-links')
 export class SocialLinksController {
-  constructor(private readonly socialLinksService: SocialLinksService) {}
+  constructor(
+    private readonly socialLinksService: SocialLinksService,
+    private readonly getUserBySlugUseCase: GetUserBySlugUseCase,
+  ) {}
 
   @Post()
   @Auth()
@@ -25,9 +29,9 @@ export class SocialLinksController {
     return this.socialLinksService.getByUser(user.id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.socialLinksService.findOne(+id);
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.socialLinksService.findOne(slug);
   }
 
   @Delete(':id')
