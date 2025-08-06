@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../ui/ErrorMessage";
 import { slugify } from "@/utils/slugify";
+import { verifySlugAction } from "@/action";
+import { toast } from "sonner";
 
 
 type FormInputs = {
@@ -10,6 +12,7 @@ type FormInputs = {
 }
 
 export const SearchHandleForm = () => {
+
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormInputs>({
     defaultValues: {
@@ -19,9 +22,15 @@ export const SearchHandleForm = () => {
 
   const handle = watch("handle");
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const slug = slugify(handle);
-    console.log(slug);
+    const { available } = await verifySlugAction(slug);
+    console.log(available);
+
+    if (!available) {
+      toast.error("El nombre de usuario ya está en uso");
+      return;
+    }
   };
 
   return (

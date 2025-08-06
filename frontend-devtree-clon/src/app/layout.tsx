@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import { inter } from "@/config/fonts";
+import { Toaster } from "sonner";
 
 
 
@@ -19,12 +20,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={inter.className}
-      >
-        {children}
-      </body>
-    </html>
+    <>
+      <html lang="en">
+        <body
+          className={inter.className}
+        >
+          {children}
+        </body>
+      </html>
+      <Toaster />
+    </>
   );
 }
