@@ -11,7 +11,7 @@ export const ButtonVisitPerfil = () => {
   return (
     <Link
       className="font-bold text-right text-slate-800 text-2xl"
-      href={''}
+      href={`/${user?.slug}`}
       target="_blank"
       rel="noreferrer noopener"
     >Visitar Mi Perfil / {user?.slug}</Link>
