@@ -4,7 +4,7 @@ export * from "./auth/LoginForm";
 export * from "./ui/GoogleButton";
 export * from "./admin/NavigationTabs";
 export * from "./admin/ProfileForm";
-export * from "./auth/AuthProvider";
+export * from "./providers/AuthProvider";
 export * from "./admin/ButtonVisitPerfil";
 export * from "./admin/PreviousViewProfile";
 export * from "./links/LinkTreeView";
