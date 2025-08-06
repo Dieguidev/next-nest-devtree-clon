@@ -31,7 +31,6 @@ export const verifySlugAction = async (
     }
 
     const data = await response.json();
-    console.log(data);
 
     return {
       available: data.available,

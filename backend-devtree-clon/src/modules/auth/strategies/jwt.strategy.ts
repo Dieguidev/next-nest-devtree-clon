@@ -26,8 +26,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user.isActive)
       throw new UnauthorizedException('User is inactive, talk with an admin');
 
-    // console.log({ user });
-
     // Crear una copia del usuario sin la contraseña
     const { password, ...userWithoutPassword } = user;
     void password; // Ignorar explícitamente la variable 'password' para evitar el warning

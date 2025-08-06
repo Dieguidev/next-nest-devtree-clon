@@ -30,7 +30,7 @@ export const SearchHandleForm = () => {
   const onSubmit = async () => {
     const slug = slugify(handle);
     const { available } = await verifySlugAction(slug);
-    console.log(available);
+
 
     if (!available) {
       toast.error("El nombre de usuario ya está en uso");

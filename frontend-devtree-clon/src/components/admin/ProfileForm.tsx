@@ -32,7 +32,7 @@ export const ProfileForm = () => {
 
   const handleUserProfileForm = async (data: FormInputs) => {
     const token = localStorage.getItem('authToken')
-    console.log(data.description === user.description && data.handle === user.slug);
+
 
     if (data.description === user.description && data.handle === user.slug) {
       toast.error('No hay cambios para guardar');
